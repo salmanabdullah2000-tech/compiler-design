@@ -1,0 +1,165 @@
+#include <iostream>
+using namespace std;
+
+// Function 1: Check Numeric Constant
+bool isNumeric(string input)
+{
+    for (int i = 0; i < input.length(); i++)
+    {
+        if (input[i] < '0' || input[i] > '9')
+            return false;
+    }
+
+    return true;
+}
+
+// Function 2: Check Operator
+bool isOperator(char ch)
+{
+    if (ch == '+' || ch == '-' || ch == '*' ||
+        ch == '/' || ch == '%' || ch == '=')
+        return true;
+
+    return false;
+}
+
+// Function 3: Check Single Line Comment
+bool isSingleLineComment(string input)
+{
+    if (input.length() >= 2 &&
+        input[0] == '/' &&
+        input[1] == '/')
+        return true;
+
+    return false;
+}
+
+// Function 3: Check Multiple Line Comment
+bool isMultiLineComment(string input)
+{
+    int n = input.length();
+
+    if (n >= 4 &&
+        input[0] == '/' &&
+        input[1] == '*' &&
+        input[n - 2] == '*' &&
+        input[n - 1] == '/')
+        return true;
+
+    return false;
+}
+
+// Function 4: Check Letter
+bool isLetter(char ch)
+{
+    if ((ch >= 'A' && ch <= 'Z') ||
+        (ch >= 'a' && ch <= 'z'))
+        return true;
+
+    return false;
+}
+
+// Function 4: Check Digit
+bool isDigit(char ch)
+{
+    if (ch >= '0' && ch <= '9')
+        return true;
+
+    return false;
+}
+
+// Function 4: Check Identifier
+bool isIdentifier(string input)
+{
+    if (input.length() == 0)
+        return false;
+
+    // First character
+    if (!(isLetter(input[0]) || input[0] == '_'))
+        return false;
+
+    // Remaining characters
+    for (int i = 1; i < input.length(); i++)
+    {
+        if (!(isLetter(input[i]) ||
+              isDigit(input[i]) ||
+              input[i] == '_'))
+            return false;
+    }
+
+    return true;
+}
+
+int main()
+{
+    int choice;
+    string input;
+
+    cout << "===== Lexical Analyzer =====" << endl;
+    cout << "1. Numeric Constant" << endl;
+    cout << "2. Operator" << endl;
+    cout << "3. Comment Line" << endl;
+    cout << "4. Identifier" << endl;
+
+    cout << "\nEnter your choice: ";
+    cin >> choice;
+
+    cin.ignore();
+
+    cout << "Enter input: ";
+    getline(cin, input);
+
+    switch (choice)
+    {
+        case 1:
+            if (isNumeric(input))
+                cout << "Numeric Constant";
+            else
+                cout << "Not a Numeric Constant";
+            break;
+
+        case 2:
+        {
+            bool found = false;
+            int count = 1;
+
+            for (int i = 0; i < input.length(); i++)
+            {
+                if (isOperator(input[i]))
+                {
+                    cout << "Operator " << count
+                         << ": " << input[i] << endl;
+
+                    count++;
+                    found = true;
+                }
+            }
+
+            if (!found)
+                cout << "No Operator Found";
+
+            break;
+        }
+
+        case 3:
+            if (isSingleLineComment(input))
+                cout << "Single Line Comment";
+            else if (isMultiLineComment(input))
+                cout << "Multiple Line Comment";
+            else
+                cout << "Not a Comment";
+            break;
+
+        case 4:
+            if (isIdentifier(input))
+                cout << "Valid Identifier";
+            else
+                cout << "Invalid Identifier";
+            break;
+
+        default:
+            cout << "Invalid Choice";
+    }
+
+    return 0;
+}
